@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "gulp dev"
+  },
+  "devDependencies": {
+    "6to5ify": "^3.1.2",
+    "browser-sync": "^1.9.0",
+    "gulp": "^3.8.10",
+    "gulp-browserify": "^0.5.1"
+  }
+}
