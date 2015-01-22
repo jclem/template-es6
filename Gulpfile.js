@@ -10,7 +10,7 @@ var sync       = require('browser-sync');
 require('6to5ify');
 
 gulp.task('build', function build() {
-  return gulp.src(['src/markdown-editor.js'])
+  return gulp.src(['src/main.js'])
     .pipe((browserify({ transform: ['6to5ify'] })))
     .pipe(gulp.dest('dist'));
 });
