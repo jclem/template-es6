@@ -19,7 +19,6 @@ gulp.task('build', function build() {
     bify.on('error', handleError);
   }
 
-  throw new Error('Change gulp.src target, then remove me!');
   return gulp.src(['src/main.js'])
     .pipe(bify)
     .pipe(gulp.dest('dist'));
