@@ -2,10 +2,12 @@
 
 'use strict';
 
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
+var buffer     = require('vinyl-buffer');
 var gulp       = require('gulp');
 var notifier   = require('node-notifier');
 var sass       = require('gulp-sass');
+var source     = require('vinyl-source-stream');
 var sync       = require('browser-sync');
 var util       = require('gulp-util');
 var isProd     = process.env.NODE_ENV === 'production';
@@ -13,23 +15,34 @@ var isProd     = process.env.NODE_ENV === 'production';
 require('6to5ify');
 
 gulp.task('build', function build() {
-  var bify = browserify({ transform: ['6to5ify'] });
+  var bundler = browserify({
+    entries  : ['./src/main.js'],
+    transform: ['6to5ify']
+  });
 
+  var bundle = bundler.bundle();
   if (!isProd) {
-    bify.on('error', handleError);
+    bundle.on('error', handleError);
   }
 
-  return gulp.src(['src/main.js'])
-    .pipe(bify)
+  return bundle
+    .pipe(source('main.js'))
+    .pipe(buffer())
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build:dummy:scripts', function buildDummyScripts() {
-  var bify = browserify({ transform: ['6to5ify' ], debug: true });
-  bify.on('error', handleError);
+  var bundler = browserify({
+    debug    : true,
+    entries  : ['./test/dummy/src/javascripts/main.js'],
+    transform: ['6to5ify']
+  });
 
-  return gulp.src(['test/dummy/src/javascripts/main.js'])
-    .pipe(bify)
+  var bundle = bundler.bundle();
+  bundle.on('error', handleError);
+  return bundle
+    .pipe(source('main.js'))
+    .pipe(buffer())
     .pipe(gulp.dest('test/dummy/dist/javascripts'));
 });
 
